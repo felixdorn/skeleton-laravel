@@ -1,6 +1,4 @@
-name: Tests
-
-on: ['push', 'pull_request']
+on: [ 'push', 'pull_request' ]
 
 jobs:
   ci:
@@ -8,32 +6,25 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        php: [8.0]
-        dependency-version: [prefer-lowest, prefer-stable]
+        os: [ ubuntu-latest ]
+        php: [ 8.1 ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
 
     name: Tests PHP${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
 
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
-    - name: Checkout
-      uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, mbstring, zip, fileinfo
+          coverage: none
 
-    - name: Cache dependencies
-      uses: actions/cache@v1
-      with:
-        path: ~/.composer/cache/files
-        key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+      - run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: dom, mbstring, zip, fileinfo
-        coverage: none
-
-    - name: Install Composer dependencies
-      run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
-
-    - name: Integration Tests
-      run: php ./vendor/bin/pest
+      - run: php ./vendor/bin/pest
