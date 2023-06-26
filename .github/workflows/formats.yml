@@ -9,13 +9,13 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.composer/cache/files
-          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+          key: dependencies-php-8.2-composer-${{ hashFiles('composer.json') }}
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 8.2
           extensions: dom, mbstring, zip
           tools: prestissimo
           coverage: pcov
-      - run: composer update --${{ matrix.dependency-version }} --no-interaction --prefer-dist
+      - run: composer update --prefer-stable --no-interaction --prefer-dist
       - run: composer test:lint
       - run: composer test:types
