@@ -9,13 +9,13 @@
         }
     ],
     "require": {
-        "php": "^8.2"
+        "php": "^8.3"
     },
     "require-dev": {
-        "pestphp/pest": "^2.6",
-        "orchestra/testbench": "^8",
-        "laravel/pint": "^1.10",
-        "phpstan/phpstan": "^1",
+        "pestphp/pest": "^v2.34",
+        "orchestra/testbench": "^v8",
+        "laravel/pint": "^v1.14",
+        "phpstan/phpstan": "^1.10",
         "symfony/var-dumper": "^6"
     },
     "autoload": {
